@@ -1,0 +1,18 @@
+recuerda que para crear una imagen es con build
+
+docker build -t node-app-image .
+docker image rm node-app-image
+
+y para crear un contenedor 
+
+docker run -p 3000:3000 -d -v pathfolderonlocation:pathfolderoncontainer  --name node-app node-app-image
+
+si estas usando windows terminal utiliza el %cd% para tomar el folderlocation y no copias la ruta completa
+si estas usando windows powershell utiliza el ${pwd} para tomar el folderlocation y no copias la ruta completa
+si estas usando linux utiliza el $(pwd) para tomar el folderlocation y no copias la ruta completa
+
+docker run -p 3000:3000 -d -v ${pwd}:/app  --name node-app node-app-image
+
+docker exec -it node-app bash es para ejecutar la bash interna y poder ver todos los datos que se encuentren en la carpeta
+el cat se puede utilizar para ver el codigo en la terminal o consola
+car index.js
