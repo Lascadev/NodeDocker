@@ -14,5 +14,17 @@ si estas usando linux utiliza el $(pwd) para tomar el folderlocation y no copias
 docker run -p 3000:3000 -d -v ${pwd}:/app  --name node-app node-app-image
 
 docker exec -it node-app bash es para ejecutar la bash interna y poder ver todos los datos que se encuentren en la carpeta
+
 el cat se puede utilizar para ver el codigo en la terminal o consola
 car index.js
+
+se creara otro volumen pero ahora anonimo para que se guarde el node_modules y asi solucionar el error si no se tiene un node_modules
+en el proyecto 
+
+docker run -p 3000:3000 -d -v ${pwd}:/app -v /app/node_modules --name node-app node-app-image
+
+para crear un archivo utilizar touch recuerda que debe estar dentro del bash
+
+aqui hacemos que el volumen que se esta copiando y montando sea read only y no se puede modificar (no podra crear archivos, ni actualizarlos es para protegerlo)
+
+docker run -p 3000:3000 -v ${pwd}:/app:ro -v /app/node_modules -d --name node-app node-app-image
