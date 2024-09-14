@@ -28,3 +28,43 @@ para crear un archivo utilizar touch recuerda que debe estar dentro del bash
 aqui hacemos que el volumen que se esta copiando y montando sea read only y no se puede modificar (no podra crear archivos, ni actualizarlos es para protegerlo)
 
 docker run -p 3000:3000 -v ${pwd}:/app:ro -v /app/node_modules -d --name node-app node-app-image
+
+aqui con el -e podemos usar las variables de entorno para asignarlas
+
+docker run -v ${pwd}:/app -v /app/node_modules -d -e PORT=4000 -p 3000:4000 --name node-app node-app-image
+
+para leer un archivo .env y que alli se tengan declaradas las envs puedes usar 
+
+docker run -v ${pwd}:/app:ro -v /app/node_modules -d --env-file ./.env -p 3000:4000 --name node-app node-app-image
+
+recuerda importante que en estos momentos a pesar de que se borren las imagenes y el contenedor como estoy creando un volume anonimo esos datos
+persisten por lo que se debe utilizar el docker volume prune para eliminar todos los volume y si se va a eliminar el contenedor tambien es buena idea
+borrar el volume anonimo
+=> elimina este contenedor de manera forzosa y el volume creado
+docker rm node-app -fv
+
+este es el modelo o estructura de docker para un archivo en node 
+
+version: '3.8'
+services:
+  node-app:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/app:ro
+      - /app/node_modules
+    environment:
+      - PORT=3000
+    # env_file:
+    #   - ./.env
+
+para levantar el contenedor seria con 
+docker-compose up -d
+para bajarlo 
+docker-compose down y recuerda que si se tienen volumenes anonimos agregar la etiqueta -v para eliminarlos
+docker-compose down -v
+
+si se hace un cambio en el dockerfile y se requiere reconstruir la imagen recuerda que se puede usar el 
+
+docker-compose up -d --build
